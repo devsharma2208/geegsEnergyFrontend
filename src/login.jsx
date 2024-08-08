@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -15,12 +16,24 @@ function LoginForm() {
       [name]: value,
     });
   };
+  const fetchlogin = async () => {
+    try {
+      const res = await axios.post(
+        "https://geegsenergybackend.onrender.com/api/v1/users/login",
+        formData
+      );
+      console.log(res);
+      sessionStorage.setItem("token", res.data.data.accessToken);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     console.log(formData);
-    navigate("/");
+    fetchlogin();
   };
 
   return (

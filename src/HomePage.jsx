@@ -5,17 +5,26 @@ import { useNavigate } from "react-router";
 function HomePage() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const token = sessionStorage.getItem("token");
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const usersData = await axios.get(
-        "https://geegsenergybackend.onrender.com/api/v1/users/get-all-users"
-      );
-      setTimeout(() => {
-        setUsers(usersData.data.data);
+      try {
+        const usersData = await axios.get(
+          "https://geegsenergybackend.onrender.com/api/v1/users/get-all-users"
+        );
+        console.log(usersData.data.data);
+
+        setTimeout(() => {
+          setUsers(usersData.data.data);
+          setLoading(false);
+        }, 1000);
+      } catch (error) {
+        console.error("Error fetching users:", error);
         setLoading(false);
-      }, 1000);
+      }
     };
 
     fetchUsers();
@@ -23,12 +32,31 @@ function HomePage() {
 
   const handleEdit = (userId) => {
     console.log("Edit user with ID:", userId);
-    navigate("/login");
+    if (token) {
+      navigate(`/registration/:${userId}`);
+    } else {
+      navigate("/login");
+    }
   };
 
-  const handleDelete = (userId) => {
+  const handleDelete = async (userId) => {
     console.log("Delete user with ID:", userId);
-    // Implement delete functionality here
+
+    try {
+      const res = await axios.delete(
+        `https://geegsenergybackend.onrender.com/api/v1/users/delete-account/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(res);
+
+      setUsers(users.filter((user) => user._id !== userId));
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
   };
 
   return (
@@ -49,20 +77,20 @@ function HomePage() {
           <tbody>
             {users &&
               users.map((user) => (
-                <tr key={user.id}>
+                <tr key={user._id}>
                   <td>{user.username}</td>
                   <td>{user.email}</td>
                   <td>{user.profession}</td>
                   <td>
                     <button
                       className="btn btn-primary"
-                      onClick={() => handleEdit(user.id)}
+                      onClick={() => handleEdit(user._id)}
                     >
                       Edit
                     </button>
                     <button
                       className="btn btn-danger ms-2"
-                      onClick={() => handleDelete(user.id)}
+                      onClick={() => handleDelete(user._id)}
                     >
                       Delete
                     </button>
