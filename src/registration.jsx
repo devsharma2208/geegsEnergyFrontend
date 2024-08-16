@@ -98,8 +98,8 @@ function RegistrationForm() {
   };
 
   return (
-    <div className="container mt-5">
-      <h2 className="text-center mb-5">
+    <div className="container mt-3">
+      <h2 className="text-center mb-4">
         {!id ? "Registration Form" : "Update"}
       </h2>
 
@@ -198,7 +198,7 @@ function RegistrationForm() {
         </div>
         <div className="row mt-5">
           <div className="col-sm-10 offset-sm-2">
-            <button type="submit" className="btn btn-primary w-50">
+            <button type="submit" className="btn btn-primary w-50 ">
               {id ? "Update" : "Register"}
             </button>
           </div>

@@ -37,7 +37,7 @@ function LoginForm() {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-3">
       <h2 className="text-center mb-5">Login</h2>
       <form onSubmit={handleSubmit} className="bg-black text-white p-5">
         <div className="mb-3 row">
