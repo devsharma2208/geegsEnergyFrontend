@@ -5,7 +5,7 @@ const Header = () => {
     <div className="header">
       <div>
         <NavLink to="/login">Login</NavLink>
-        <NavLink to="/registration">Users</NavLink>
+        <NavLink to="/">All Users</NavLink>
       </div>
     </div>
   );
